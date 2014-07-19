@@ -107,9 +107,6 @@
          }else{
             childs=[rootNode nodesForXPath:xpath error:nil];
          }
-         
-        
-     
         
         for (GDataXMLNode *item in childs){
             [array addObject:[self childsNodeToDictionary:item]];

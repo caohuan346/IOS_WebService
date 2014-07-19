@@ -1,38 +1,37 @@
- 
 
-#import "ServiceHelper.h"
 
-@interface ServiceHelper()
+#import "ServiceHandler.h"
+
+@interface ServiceHandler()
 //重设队列
 -(void)resetQueue;
 -(NSString*)soapAction:(NSString*)namespace methodName:(NSString*)methodName;
 -(ASIHTTPRequest*)requestWithServerArgs:(ServiceArgs*)args;
 @end
 
-@implementation ServiceHelper
+@implementation ServiceHandler
 @synthesize delegate,httpRequest;
 @synthesize networkQueue;
 
 //单例模式
-+ (ServiceHelper *)sharedInstance{
++ (ServiceHandler *)sharedInstance{
     static dispatch_once_t  onceToken;
-    static ServiceHelper * sSharedInstance;
+    static ServiceHandler * sSharedInstance;
     
     dispatch_once(&onceToken, ^{
-        sSharedInstance = [[ServiceHelper alloc] init];
+        sSharedInstance = [[ServiceHandler alloc] init];
     });
     return sSharedInstance;
 }
 #pragma mark -
 #pragma mark 初始化操作
--(id)initWithDelegate:(id<ServiceHelperDelegate>)theDelegate
+-(id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate
 {
 	if (self=[super init]) {
 		self.delegate=theDelegate;
         if (self.networkQueue) {
             self.networkQueue=[[ASINetworkQueue alloc] init];
         }
-        
 	}
 	return self;
 }
@@ -58,7 +57,7 @@
     return request;
 }
 +(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args{
-    ServiceHelper *helper=[[[ServiceHelper alloc] init] autorelease];
+    ServiceHandler *helper=[[[ServiceHandler alloc] init] autorelease];
     return [helper commonSharedRequest:args];
 }
 #pragma mark -
@@ -74,7 +73,7 @@
     if (error) {
         *error=[request error];
     }
-     
+    
     //处理返回的结果
     return [ServiceResult requestResult:request];
 }
@@ -83,43 +82,46 @@
 }
 -(ServiceResult*)syncServiceMethodName:(NSString*)methodName error:(NSError**)error{
     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
-   return  [self syncService:args error:error];
+    return  [self syncService:args error:error];
 }
 +(ServiceResult*)syncService:(ServiceArgs*)args
 {
-    return [ServiceHelper syncService:args error:nil];
+    return [ServiceHandler syncService:args error:nil];
 }
 +(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error
 {
-    ServiceHelper *helper=[ServiceHelper sharedInstance];
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncService:args error:error];
 }
 +(ServiceResult*)syncMethodName:(NSString*)methodName{
     return [self syncMethodName:methodName error:nil];
 }
 +(ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error{
-    ServiceHelper *helper=[ServiceHelper sharedInstance];
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncServiceMethodName:methodName error:error];
 }
 #pragma mark -
-#pragma mark 异步请求
+#pragma mark asyn request
 -(ASIHTTPRequest*)requestWithServerArgs:(ServiceArgs*)args{
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:args.webURL];
+    
     //以下对请求信息添加属性前四句是必有的，第五句是soap信息。
-
     [request addRequestHeader:@"Host" value:[args.webURL host]];
     [request addRequestHeader:@"Content-Type" value:@"text/xml; charset=utf-8"];
 	[request addRequestHeader:@"Content-Length" value:msgLength];
     [request addRequestHeader:@"SOAPAction" value:[self soapAction:args.serviceNameSpace methodName:args.methodName]];
     [request setRequestMethod:@"POST"];
+    
     //设置用户信息
     //[self.httpRequest setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:args.methodName,@"name", nil]];
+    
 	//传soap信息
     [request appendPostData:[args.soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
     [request setValidatesSecureCertificate:NO];
     [request setTimeOutSeconds:30.0];//表示30秒请求超时
     [request setDefaultResponseEncoding:NSUTF8StringEncoding];
+    
     return request;
 }
 -(void)asynService:(ServiceArgs*)args{
@@ -129,15 +131,17 @@
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
 	
     //或者[self.httpRequest setRequestHeaders:args.headers];
-
+    
     //以下对请求信息添加属性前四句是必有的，第五句是soap信息。
 	[self.httpRequest addRequestHeader:@"Host" value:[args.webURL host]];
     [self.httpRequest addRequestHeader:@"Content-Type" value:@"text/xml; charset=utf-8"];
 	[self.httpRequest addRequestHeader:@"Content-Length" value:msgLength];
     [self.httpRequest addRequestHeader:@"SOAPAction" value:[self soapAction:args.serviceNameSpace methodName:args.methodName]];
     [self.httpRequest setRequestMethod:@"POST"];
+    
     //设置用户信息
     //[self.httpRequest setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:args.methodName,@"name", nil]];
+    
 	//传soap信息
     [self.httpRequest appendPostData:[args.soapMessage dataUsingEncoding:NSUTF8StringEncoding]];
     [self.httpRequest setValidatesSecureCertificate:NO];
@@ -152,15 +156,24 @@
     }
     
     [self.httpRequest setDelegate:self];
-    //异步请求
+    
+    //asyn request
 	[self.httpRequest startAsynchronous];
-    
-    
 }
--(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHelperDelegate>)theDelegate{
-    
+
+-(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate{
     self.delegate=theDelegate;
     [self asynService:args];
+}
+
+-(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
+//    ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
+//    args.methodName = methodName;
+//    args.soapParams = paramsArray;
+//    args.soapMessage = [args stringSoapMessage:paramsArray];
+    
+    ServiceArgs *args = [[ServiceArgs alloc] initWithMethodName:methodName soapParams:paramsArray];
+   return  [self asynService:args progress:nil success:finished failed:failed];
 }
 
 -(ASIHTTPRequest*)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
@@ -183,55 +196,63 @@
     }];
     [request setFailedBlock:^{
         if (failed) {
-            
             //  取消时不显示
             if ([[request.error description]  rangeOfString:@"cancelled"].location == NSNotFound  ) {
                 
                 failed(request.error,request.userInfo);
             }
-            
         }
     }];
     [request startAsynchronous];
     
     return request;
 }
--(void)asynServiceMethodName:(NSString*)methodName delegate:(id<ServiceHelperDelegate>)theDelegate{
+
+-(void)asynServiceMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate{
     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
     [self asynService:args delegate:theDelegate];
 }
+
 -(ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
     return [self asynServiceMethodName:methodName progress:nil success:finished failed:failed];
 }
+
 -(ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
     return [self asynService:args progress:progress success:finished failed:failed];
 }
-+(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHelperDelegate>)theDelegate
+
++(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate
 {
-    ServiceHelper *helper=[ServiceHelper sharedInstance];
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
     helper.delegate=theDelegate;
     [helper asynService:args];
 }
+
 +(void)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
-    [ServiceHelper asynService:args progress:nil success:finished failed:failed];
+    [ServiceHandler asynService:args progress:nil success:finished failed:failed];
 }
+
 +(void)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
-    ServiceHelper *helper=[ServiceHelper sharedInstance];
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
     [helper asynService:args progress:progress success:finished failed:failed];
 }
-+(void)asynMethodName:(NSString*)methodName delegate:(id<ServiceHelperDelegate>)theDelegate{
-      ServiceHelper *helper=[ServiceHelper sharedInstance];
-      [helper asynServiceMethodName:methodName delegate:theDelegate];
+
++(void)asynMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate{
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
+    [helper asynServiceMethodName:methodName delegate:theDelegate];
 }
+
 +(void)asynMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
     [self asynMethodName:methodName progress:nil success:finished failed:failed];
 }
+
 +(void)asynMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
-     ServiceHelper *helper=[ServiceHelper sharedInstance];
-     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
+    ServiceHandler *helper=[ServiceHandler sharedInstance];
+    ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
     [helper asynService:args progress:progress success:finished failed:failed];
 }
+
 #pragma mark -
 #pragma mark ASIHTTPRequest delegate Methods
 - (void)requestFinished:(ASIHTTPRequest *)request
@@ -240,12 +261,13 @@
     if (self.delegate&&[self.delegate respondsToSelector:@selector(finishSoapRequest:)]) {
         [self.delegate finishSoapRequest:result];
     }
-
+    
     
 	if(_finishBlock){
         _finishBlock(result);
     }
 }
+
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
 	NSError *error = [request error];
@@ -256,32 +278,22 @@
     if (_failedBlock) {
         _failedBlock(error,[request userInfo]);
     }
-
+    
 }
 
 
 #pragma mark -
-#pragma mark 队列请求
+#pragma mark queue request
 //开始排列
-
 -(BOOL)cancelForMenthod:(NSString*)methodName{
-    
-    
     NSArray *array=[[ASIHTTPRequest  sharedQueue] operations];
     for (ASIHTTPRequest *request in array) {
-        
-        
         if ([request.requestHeaders[@"SOAPAction"] rangeOfString:methodName].location != NSNotFound) {
             [request cancel];
-            
-            
             return YES;
         }
     }
-    
-    
     return NO;
-    
 }
 
 -(void)resetQueue{
@@ -295,6 +307,7 @@
     [self.networkQueue setRequestDidFailSelector:@selector(requestFetchFailed:)];
     [self.networkQueue setDelegate:self];
 }
+
 -(void)startQueue{
     [self resetQueue];
     for (ASIHTTPRequest *item in _requestList) {
@@ -302,11 +315,11 @@
     }
     [self.networkQueue go];
 }
+
 //添加队列
 -(void)addQueue:(ASIHTTPRequest*)request{
     if (!_requestList) {
         _requestList=[[NSMutableArray alloc] init];
-        
         if (!_queueResults) {
             _queueResults=[[NSMutableArray alloc] init];
         }else{
@@ -314,8 +327,8 @@
         }
     }
     [_requestList addObject:request];
-    
 }
+
 -(void)addRangeQueue:(NSArray*)requests{
     if (!_requestList) {
         _requestList=[[NSMutableArray alloc] init];
@@ -328,11 +341,12 @@
     [_requestList removeAllObjects];
     _requestList=[NSMutableArray arrayWithArray:requests];
 }
+
 //队列请求处理
 -(void)queueFetchComplete:(ASIHTTPRequest*)request{
     if(self.delegate&&[self.delegate respondsToSelector:@selector(finishQueueComplete:)]){
         [self.delegate finishQueueComplete:_queueResults];
-    }    
+    }
     if (_finishQueueBlock) {
         _finishQueueBlock(_queueResults);
     }
@@ -343,8 +357,9 @@
         [_queueResults removeAllObjects];
     }
 }
+
 -(void)requestFetchComplete:(ASIHTTPRequest*)request{
-   
+    
 	ServiceResult *result=[ServiceResult requestResult:request];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(finishSoapRequest:)]) {
         [self.delegate finishSoapRequest:result];
@@ -357,6 +372,7 @@
     }
     
 }
+
 -(void)requestFetchFailed:(ASIHTTPRequest*)request{
     
     if(self.delegate&&[self.delegate respondsToSelector:@selector(failedSoapRequest:userInfo:)]){
@@ -366,10 +382,12 @@
         _failedBlock([request error],[request userInfo]);
     }
 }
--(void)startQueue:(id<ServiceHelperDelegate>)theDelegate{
+
+-(void)startQueue:(id<ServiceHandlerDelegate>)theDelegate{
     self.delegate=theDelegate;
     [self startQueue:nil failed:nil complete:nil];
 }
+
 -(void)startQueue:(finishBlockRequest)finish failed:(failedBlockRequest)failed complete:(finishBlockQueueComplete)finishQueue{
     
     Block_release(_failedBlock);
@@ -382,12 +400,13 @@
     
     [self startQueue];
 }
-#pragma mark 私有方法
+
+#pragma mark private
 -(NSString*)soapAction:(NSString*)namespace methodName:(NSString*)methodName{
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"/$" options:0 error:nil];
     NSUInteger numberOfMatches = [regex numberOfMatchesInString:namespace options:0 range:NSMakeRange(0, [namespace length])];
     //NSArray *array=[regex matchesInString:namespace options:0 range:NSMakeRange(0, [namespace length])];
-  
+    
     if(numberOfMatches>0){
         return [NSString stringWithFormat:@"%@%@",namespace,methodName];
     }
@@ -395,6 +414,7 @@
     //return [NSString stringWithFormat:@"%@/ZSDServices/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
     return [NSString stringWithFormat:@"%@/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
 }
+
 -(void)dealloc{
     Block_release(_failedBlock);
     Block_release(_finishBlock);
@@ -412,4 +432,5 @@
     }
 	[super dealloc];
 }
+
 @end

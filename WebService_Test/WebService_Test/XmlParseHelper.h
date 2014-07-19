@@ -17,27 +17,32 @@
 
 -(void)setDataSource:(id)data;
 -(id)initWithData:(id)xml;
-//返回webservice内容
+
+//seek webservice content
 -(NSString*)soapMessageResultXml:(NSString*)methodName;
-//查询
+
+//find
 -(XmlNode*)selectSingleNode:(NSString*)xpath;
 -(XmlNode*)selectSingleNode:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
 -(NSArray*)selectNodes:(NSString*)xpath;
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
 -(NSArray*)selectNodes:(NSString*)xpath className:(NSString*)className;
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces className:(NSString*)className;
+
 //将某个节点下子节点转换成对象
 -(id)nodeToObject:(GDataXMLNode*)node className:(NSString*)className;
 //对于webservice返回soap xml内容的查询
 -(XmlNode*)soapXmlSelectSingleNode:(NSString*)xpath;
 -(NSArray*)soapXmlSelectNodes:(NSString*)xpath;
 -(NSArray*)soapXmlSelectNodes:(NSString*)xpath className:(NSString*)className;
+
 //取得节点属性
 -(NSDictionary*)getXmlNodeAttrs:(GDataXMLNode*)node;
 -(NSDictionary*)selectSingleNodeAttrs:(NSString*)xpath;
 -(NSDictionary*)selectSingleNodeAttrs:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
 -(NSArray*)selectNodeAttrs:(NSString*)xpath;
 -(NSArray*)selectNodeAttrs:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
+
 //取得节点值
 -(NSString*)getXmlNodeValue:(GDataXMLNode*)node;
 -(NSString*)selectSingleNodeValue:(NSString*)xpath;

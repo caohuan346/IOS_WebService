@@ -16,7 +16,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 @synthesize webURL,headers,defaultSoapMesage;
 @synthesize soapParams;
 
-
+#pragma mark - setter
 +(void)setWebServiceURL:(NSString*)url
 {
     if (defaultWebServiceUrl!=url) {
@@ -32,8 +32,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     }
 }
 
-#pragma mark -
-#pragma mark 属性重写
+#pragma mark - getter
 -(NSString*)defaultSoapMesage{
     /*
     NSString *soapBody=@"<?xml version=\"1.0\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:Tuan=\"http://tempuri.org/\" xmlns:tns1=\"http://mobile.tuandai.com\" xmlns:ns1=\"http://mobile.tuandai.com/Imports\" xmlns:tns2=\"http://schemas.microsoft.com/2003/10/Serialization/\" xsl:version=\"1.0\">\n"
@@ -57,21 +56,26 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     "</soap:Envelope>\n";
     return soapBody;
 }
+
 -(NSURL*)webURL{
     return [NSURL URLWithString:[self serviceURL]];
 }
+
 -(NSString*)serviceURL{
     if (serviceURL) {
         return serviceURL;
     }
     return defaultWebServiceUrl;
 }
+
 -(NSString*)serviceNameSpace{
     if (serviceNameSpace) {
         return serviceNameSpace;
     }
     return defaultWebServiceNameSpace;
 }
+
+
 -(NSString*)soapMessage{
 //    if (soapMessage) {
 //        return soapMessage;
@@ -80,6 +84,8 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     self.soapMessage = message;
     return message;
 }
+
+
 -(NSMutableDictionary*)headers{
     NSMutableDictionary *dic=[NSMutableDictionary dictionary];
     [dic setValue:[[self webURL] host] forKey:@"Host"];
@@ -88,8 +94,8 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     [dic setValue:[NSString stringWithFormat:@"%@%@",[self serviceNameSpace],[self methodName]] forKey:@"SOAPAction"];
     return dic;
 }
-#pragma mark -
-#pragma mark 私有方法
+
+#pragma mark - private
 -(NSString*)paramsFormatString:(NSArray*)params{
     NSMutableString *xml=[NSMutableString stringWithFormat:@""];
     for (NSDictionary *item in params) {
@@ -138,11 +144,19 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return paramPart;
 }
 
-#pragma mark -
-#pragma mark 公有方法
--(NSString*)stringSoapMessage:(NSArray*)params{
+#pragma mark - public
+-(id)initWithMethodName:(NSString *)_methodName soapParams:(NSArray *)_soapParams{
+    if (self = [super init]) {
+        self.methodName = _methodName;
+        self.soapParams = _soapParams;
+        self.soapMessage = [self stringSoapMessage:soapParams];
+    }
+    return self;
+}
+
+-(NSString *)stringSoapMessage:(NSArray*)params{
     if (params) {
-#warning mark - td before
+//#warning mark - td before
         /*
         NSMutableString *soap=[NSMutableString stringWithFormat:@"<tns1:%@><tns1:jsonString>",[self methodName]];
         
