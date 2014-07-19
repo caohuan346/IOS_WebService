@@ -11,17 +11,17 @@ static NSString *defaultWebServiceUrl= @"http://webservice.webxml.com.cn/WebServ
 static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 
 @implementation ServiceArgs
-@synthesize serviceURL,serviceNameSpace;
-@synthesize methodName,soapMessage;
-@synthesize webURL,headers,defaultSoapMesage;
-@synthesize soapParams;
+//@synthesize serviceURL,serviceNameSpace;
+//@synthesize methodName,soapMessage;
+//@synthesize webURL,headers,defaultSoapMesage;
+//@synthesize soapParams;
 
 #pragma mark - init
--(id)initWithMethodName:(NSString *)_methodName soapParamsArray:(NSArray *)_paramsArray{
+-(id)initWithMethodName:(NSString *)methodName soapParamsArray:(NSArray *)paramsArray{
     if (self = [super init]) {
-        self.methodName = _methodName;
-        self.soapParams = _paramsArray;
-        self.soapMessage = [self stringSoapMessage:_paramsArray];
+        self.methodName = methodName;
+        self.soapParams = paramsArray;
+        self.soapMessage = [self stringSoapMessage:paramsArray];
     }
     return self;
 }
@@ -72,15 +72,15 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 }
 
 -(NSString*)serviceURL{
-    if (serviceURL) {
-        return serviceURL;
+    if (_serviceURL) {
+        return _serviceURL;
     }
     return defaultWebServiceUrl;
 }
 
 -(NSString*)serviceNameSpace{
-    if (serviceNameSpace) {
-        return serviceNameSpace;
+    if (_serviceNameSpace) {
+        return _serviceNameSpace;
     }
     return defaultWebServiceNameSpace;
 }
@@ -104,6 +104,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     [dic setValue:[NSString stringWithFormat:@"%@%@",[self serviceNameSpace],[self methodName]] forKey:@"SOAPAction"];
     return dic;
 }
+
 #pragma mark -
 #pragma mark 私有方法
 -(NSString*)paramsFormatString:(NSArray*)params{
@@ -116,7 +117,6 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     }
     return xml;
 }
-
 
 -(NSString*)paramsFormatJsonString:(NSArray*)params{
     NSMutableString *json=[NSMutableString stringWithFormat:@"{"];
@@ -180,9 +180,11 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     
     return [NSString stringWithFormat:[self defaultSoapMesage],body];
 }
+
 +(ServiceArgs*)serviceMethodName:(NSString*)methodName{
     return [self serviceMethodName:methodName soapMessage:nil];
 }
+
 +(ServiceArgs*)serviceMethodName:(NSString*)name soapMessage:(NSString*)msg{
     ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
     args.methodName=name;
