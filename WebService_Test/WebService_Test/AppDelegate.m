@@ -7,11 +7,40 @@
 //
 
 #import "AppDelegate.h"
+#import "ServiceHelper.h"
+//#import "ServiceArgs.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSMutableArray *params=[NSMutableArray array];
+    [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"13825161921",@"mobileCode", nil]];
+    [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"",@"userID", nil]];
+    ServiceArgs *args=[[ServiceArgs alloc] init];
+    
+    args.methodName=@"getMobileCodeInfo";//webservice方法名
+    args.soapParams=params;//方法参数
+    
+    [[ServiceHelper sharedInstance] asynService:args success:^(ServiceResult *result){
+        NSLog(@"%@",result);
+        /*
+        NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"//xmlns:GetPlanListResult"];
+        
+        NSDictionary *dic = [arr[0][@"text"] objectFromJSONString];
+        
+        if ([dic[@"Result"]  intValue] == 1) {
+            
+        }else {
+            
+        }
+         */
+        
+    } failed:^(NSError *error, NSDictionary *userInfo){
+        NSLog(@"111111");
+        
+    }];
+    
     // Override point for customization after application launch.
     return YES;
 }

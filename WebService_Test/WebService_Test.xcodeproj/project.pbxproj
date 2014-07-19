@@ -12,7 +12,7 @@
 		47230D601979045C002BD4F0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47230D5F1979045C002BD4F0 /* CoreGraphics.framework */; };
 		47230D621979045C002BD4F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47230D611979045C002BD4F0 /* UIKit.framework */; };
 		47230D681979045C002BD4F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47230D661979045C002BD4F0 /* InfoPlist.strings */; };
-		47230D6A1979045C002BD4F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47230D691979045C002BD4F0 /* main.m */; };
+		47230D6A1979045C002BD4F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47230D691979045C002BD4F0 /* main.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		47230D6E1979045C002BD4F0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 47230D6D1979045C002BD4F0 /* AppDelegate.m */; };
 		47230D711979045C002BD4F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 47230D6F1979045C002BD4F0 /* Main.storyboard */; };
 		47230D741979045C002BD4F0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47230D731979045C002BD4F0 /* ViewController.m */; };
@@ -22,6 +22,12 @@
 		47230D7F1979045C002BD4F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47230D611979045C002BD4F0 /* UIKit.framework */; };
 		47230D871979045C002BD4F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47230D851979045C002BD4F0 /* InfoPlist.strings */; };
 		47230D891979045C002BD4F0 /* WebService_TestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 47230D881979045C002BD4F0 /* WebService_TestTests.m */; };
+		4754C3C2197913A90042B4D0 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3BD197913A90042B4D0 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4754C3C3197913A90042B4D0 /* XmlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3BF197913A90042B4D0 /* XmlNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4754C3C4197913A90042B4D0 /* XmlParseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3C1197913A90042B4D0 /* XmlParseHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4754C3CC197913D00042B4D0 /* ServiceArgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3C7197913D00042B4D0 /* ServiceArgs.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4754C3CD197913D00042B4D0 /* ServiceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3C9197913D00042B4D0 /* ServiceHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4754C3CE197913D00042B4D0 /* ServiceResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3CB197913D00042B4D0 /* ServiceResult.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +60,20 @@
 		47230D841979045C002BD4F0 /* WebService_TestTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WebService_TestTests-Info.plist"; sourceTree = "<group>"; };
 		47230D861979045C002BD4F0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		47230D881979045C002BD4F0 /* WebService_TestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebService_TestTests.m; sourceTree = "<group>"; };
+		4754C3BA197913A90042B4D0 /* GDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataDefines.h; sourceTree = "<group>"; };
+		4754C3BB197913A90042B4D0 /* GDataTargetNamespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataTargetNamespace.h; sourceTree = "<group>"; };
+		4754C3BC197913A90042B4D0 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		4754C3BD197913A90042B4D0 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		4754C3BE197913A90042B4D0 /* XmlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlNode.h; sourceTree = "<group>"; };
+		4754C3BF197913A90042B4D0 /* XmlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlNode.m; sourceTree = "<group>"; };
+		4754C3C0197913A90042B4D0 /* XmlParseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlParseHelper.h; sourceTree = "<group>"; };
+		4754C3C1197913A90042B4D0 /* XmlParseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlParseHelper.m; sourceTree = "<group>"; };
+		4754C3C6197913D00042B4D0 /* ServiceArgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceArgs.h; sourceTree = "<group>"; };
+		4754C3C7197913D00042B4D0 /* ServiceArgs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceArgs.m; sourceTree = "<group>"; };
+		4754C3C8197913D00042B4D0 /* ServiceHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceHelper.h; sourceTree = "<group>"; };
+		4754C3C9197913D00042B4D0 /* ServiceHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceHelper.m; sourceTree = "<group>"; };
+		4754C3CA197913D00042B4D0 /* ServiceResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceResult.h; sourceTree = "<group>"; };
+		4754C3CB197913D00042B4D0 /* ServiceResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceResult.m; sourceTree = "<group>"; };
 		93422F6BD72143CDBA7FA834 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		99C77FF69AD14EF2B60F2C38 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +138,8 @@
 		47230D631979045C002BD4F0 /* WebService_Test */ = {
 			isa = PBXGroup;
 			children = (
+				4754C3C5197913C30042B4D0 /* webService */,
+				4754C3B9197913980042B4D0 /* xml */,
 				47230D6C1979045C002BD4F0 /* AppDelegate.h */,
 				47230D6D1979045C002BD4F0 /* AppDelegate.m */,
 				47230D6F1979045C002BD4F0 /* Main.storyboard */,
@@ -156,6 +178,34 @@
 				47230D851979045C002BD4F0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4754C3B9197913980042B4D0 /* xml */ = {
+			isa = PBXGroup;
+			children = (
+				4754C3BA197913A90042B4D0 /* GDataDefines.h */,
+				4754C3BB197913A90042B4D0 /* GDataTargetNamespace.h */,
+				4754C3BC197913A90042B4D0 /* GDataXMLNode.h */,
+				4754C3BD197913A90042B4D0 /* GDataXMLNode.m */,
+				4754C3BE197913A90042B4D0 /* XmlNode.h */,
+				4754C3BF197913A90042B4D0 /* XmlNode.m */,
+				4754C3C0197913A90042B4D0 /* XmlParseHelper.h */,
+				4754C3C1197913A90042B4D0 /* XmlParseHelper.m */,
+			);
+			name = xml;
+			sourceTree = "<group>";
+		};
+		4754C3C5197913C30042B4D0 /* webService */ = {
+			isa = PBXGroup;
+			children = (
+				4754C3C6197913D00042B4D0 /* ServiceArgs.h */,
+				4754C3C7197913D00042B4D0 /* ServiceArgs.m */,
+				4754C3C8197913D00042B4D0 /* ServiceHelper.h */,
+				4754C3C9197913D00042B4D0 /* ServiceHelper.m */,
+				4754C3CA197913D00042B4D0 /* ServiceResult.h */,
+				4754C3CB197913D00042B4D0 /* ServiceResult.m */,
+			);
+			name = webService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,8 +341,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				47230D741979045C002BD4F0 /* ViewController.m in Sources */,
+				4754C3C3197913A90042B4D0 /* XmlNode.m in Sources */,
+				4754C3C2197913A90042B4D0 /* GDataXMLNode.m in Sources */,
+				4754C3CD197913D00042B4D0 /* ServiceHelper.m in Sources */,
+				4754C3CE197913D00042B4D0 /* ServiceResult.m in Sources */,
 				47230D6E1979045C002BD4F0 /* AppDelegate.m in Sources */,
 				47230D6A1979045C002BD4F0 /* main.m in Sources */,
+				4754C3C4197913A90042B4D0 /* XmlParseHelper.m in Sources */,
+				4754C3CC197913D00042B4D0 /* ServiceArgs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -162,11 +162,15 @@
     self.delegate=theDelegate;
     [self asynService:args];
 }
+
 -(ASIHTTPRequest*)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
     return  [self asynService:args progress:nil success:finished failed:failed];
 }
+
 -(ASIHTTPRequest*)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult*))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
+    
     //__block ASIHTTPRequest *request=[self requestWithServerArgs:args];
+    
     ASIHTTPRequest *request=[self requestWithServerArgs:args];
     if (progress) {
         progress(request);
@@ -386,9 +390,10 @@
   
     if(numberOfMatches>0){
         return [NSString stringWithFormat:@"%@%@",namespace,methodName];
-    } 
-    
-    return [NSString stringWithFormat:@"%@/TDServices/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
+    }
+#warning ---- soapAction generate
+    //return [NSString stringWithFormat:@"%@/ZSDServices/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
+    return [NSString stringWithFormat:@"%@/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
 }
 -(void)dealloc{
     Block_release(_failedBlock);

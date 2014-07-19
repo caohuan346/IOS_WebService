@@ -1,4 +1,5 @@
- 
+
+
 #import "ServiceArgs.h"
 
 @interface ServiceArgs()
@@ -6,12 +7,8 @@
 @end
 
 //
-static NSString *defaultWebServiceUrl= //@"https://mobile.tuandai.com:8333/Tuan.svc";
-//@"http://183.63.225.90:800/TuanDai.MobileSystem.WcfHost/Tuan.svc";
-@"http://192.168.1.8/TuanDai.MobileSystem.WcfHost/Tuan.svc";
-//@"https://mobile.tuandai.com:8333/Tuan.svc";
-//@"https://121.13.64.21:8333/tuan.svc";
-static NSString *defaultWebServiceNameSpace=@"http://mobile.tuandai.com";
+static NSString *defaultWebServiceUrl= @"http://webservice.webxml.com.cn/WebServices/MobileCodeWS.asmx";
+static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 
 @implementation ServiceArgs
 @synthesize serviceURL,serviceNameSpace;
@@ -38,8 +35,26 @@ static NSString *defaultWebServiceNameSpace=@"http://mobile.tuandai.com";
 #pragma mark -
 #pragma mark 属性重写
 -(NSString*)defaultSoapMesage{
+    /*
     NSString *soapBody=@"<?xml version=\"1.0\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:Tuan=\"http://tempuri.org/\" xmlns:tns1=\"http://mobile.tuandai.com\" xmlns:ns1=\"http://mobile.tuandai.com/Imports\" xmlns:tns2=\"http://schemas.microsoft.com/2003/10/Serialization/\" xsl:version=\"1.0\">\n"
     "<soap:Body>%@</soap:Body></soap:Envelope>";
+     */
+    
+    /*
+    NSString *soapBody = @"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+    "<soap:Body>\n"
+    "<getMobileCodeInfo xmlns=\"http://WebXml.com.cn/\">\n"
+    "<mobileCode>%@</mobileCode>\n"
+    "<userID></userID>\n"
+    "</getMobileCodeInfo>\n"
+    "</soap:Body>\n"
+    "</soap:Envelope>\n";
+    */
+    NSString *soapBody = @"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+    "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+    "<soap:Body>%@</soap:Body>\n"
+    "</soap:Envelope>\n";
     return soapBody;
 }
 -(NSURL*)webURL{
@@ -60,8 +75,10 @@ static NSString *defaultWebServiceNameSpace=@"http://mobile.tuandai.com";
 -(NSString*)soapMessage{
 //    if (soapMessage) {
 //        return soapMessage;
-//    } 
-    return [self stringSoapMessage:[self soapParams]];
+//    }
+    NSString *message = [self stringSoapMessage:[self soapParams]];
+    self.soapMessage = message;
+    return message;
 }
 -(NSMutableDictionary*)headers{
     NSMutableDictionary *dic=[NSMutableDictionary dictionary];
@@ -104,16 +121,43 @@ static NSString *defaultWebServiceNameSpace=@"http://mobile.tuandai.com";
     
     return json;
 }
+
+/**
+ *  生成参数部分
+ *
+ *  @param params <#params description#>
+ *
+ *  @return <#return value description#>
+ */
+-(NSString*)generateParamsPartString:(NSArray*)params{
+    NSMutableString *paramPart=[NSMutableString string];
+    for (NSDictionary *item in params) {
+        NSString *key=[[item allKeys] objectAtIndex:0];
+        [paramPart appendFormat:@"<%@>%@</%@>",key,[item objectForKey:key],key];
+    }
+    return paramPart;
+}
+
 #pragma mark -
 #pragma mark 公有方法
 -(NSString*)stringSoapMessage:(NSArray*)params{
     if (params) {
+#warning mark - td before
+        /*
         NSMutableString *soap=[NSMutableString stringWithFormat:@"<tns1:%@><tns1:jsonString>",[self methodName]];
         
         [soap appendString:[self paramsFormatJsonString:params]];
         [soap appendFormat:@"</tns1:jsonString></tns1:%@>",[self methodName]];
+        */
         
-        return [NSString stringWithFormat:[self defaultSoapMesage],soap];
+        NSMutableString *soap=[NSMutableString stringWithFormat:@"<%@ xmlns=\"http://WebXml.com.cn/\">",[self methodName]];
+        
+        //[soap appendString:[self paramsFormatJsonString:params]];
+        [soap appendString:[self generateParamsPartString:params]];
+        [soap appendFormat:@"</%@>",[self methodName]];
+        
+        NSString *soapMsg = [NSString stringWithFormat:[self defaultSoapMesage],soap];
+        return soapMsg;
     }
     
     NSString *body=[NSString stringWithFormat:@"<%@ xmlns=\"%@\" />",[self methodName],[self serviceNameSpace]];
