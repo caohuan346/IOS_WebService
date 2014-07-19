@@ -409,9 +409,11 @@
     //[document setCharacterEncoding:@"uft-8"];
     return [document autorelease];
 }
+
 -(GDataXMLNode*)getSingleNode:(NSString*)xpath{
     return [self getSingleNode:xpath nameSpaces:nil];
 }
+
 -(GDataXMLNode*)getSingleNode:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     if (self.document) {
         GDataXMLElement* rootNode = [self.document rootElement];

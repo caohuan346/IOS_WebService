@@ -52,7 +52,9 @@
 
 -(NSArray*)childNodesToObject:(NSString*)className;
 -(NSArray*)childNodesToArray;
+
 //辅助方法
 -(id)childsNodeToObject:(GDataXMLNode*)node objectName:(NSString*)className;
 -(NSArray*)nodesChildsNodesToObjects:(GDataXMLNode*)node objectName:(NSString*)className;
+
 @end

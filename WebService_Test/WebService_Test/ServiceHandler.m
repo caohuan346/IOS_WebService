@@ -3,10 +3,12 @@
 #import "ServiceHandler.h"
 
 @interface ServiceHandler()
-//重设队列
+
+//reset queue
 -(void)resetQueue;
 -(NSString*)soapAction:(NSString*)namespace methodName:(NSString*)methodName;
 -(ASIHTTPRequest*)requestWithServerArgs:(ServiceArgs*)args;
+
 @end
 
 @implementation ServiceHandler
@@ -23,8 +25,8 @@
     });
     return sSharedInstance;
 }
-#pragma mark -
-#pragma mark 初始化操作
+
+#pragma mark - init
 -(id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate
 {
 	if (self=[super init]) {
@@ -35,8 +37,8 @@
 	}
 	return self;
 }
-#pragma mark -
-#pragma mark 获取公有请求的ASIHTTPRequest
+
+#pragma mark - public request
 -(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args{
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:args.webURL];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
@@ -56,52 +58,59 @@
     [request setDefaultResponseEncoding:NSUTF8StringEncoding];
     return request;
 }
+
 +(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args{
     ServiceHandler *helper=[[[ServiceHandler alloc] init] autorelease];
     return [helper commonSharedRequest:args];
 }
-#pragma mark -
-#pragma mark 同步请求
+#pragma mark - sync request
 -(ServiceResult*)syncService:(ServiceArgs*)args{
     return [self syncService:args error:nil];
 }
+
 -(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error
 {
     ASIHTTPRequest *request=[self requestWithServerArgs:args];
-    //设置同步
+    
+    //sync
     [request startSynchronous];
     if (error) {
         *error=[request error];
     }
-    
-    //处理返回的结果
+    //handle result
     return [ServiceResult requestResult:request];
 }
+
 -(ServiceResult*)syncServiceMethodName:(NSString*)methodName{
     return [self syncServiceMethodName:methodName error:nil];
 }
+
 -(ServiceResult*)syncServiceMethodName:(NSString*)methodName error:(NSError**)error{
     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
     return  [self syncService:args error:error];
 }
+
 +(ServiceResult*)syncService:(ServiceArgs*)args
 {
     return [ServiceHandler syncService:args error:nil];
 }
+
 +(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error
 {
     ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncService:args error:error];
 }
+
 +(ServiceResult*)syncMethodName:(NSString*)methodName{
     return [self syncMethodName:methodName error:nil];
 }
+
 +(ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error{
     ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncServiceMethodName:methodName error:error];
 }
-#pragma mark -
-#pragma mark asyn request
+
+#pragma mark - asyn request
 -(ASIHTTPRequest*)requestWithServerArgs:(ServiceArgs*)args{
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:args.webURL];
@@ -166,13 +175,8 @@
     [self asynService:args];
 }
 
--(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
-//    ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
-//    args.methodName = methodName;
-//    args.soapParams = paramsArray;
-//    args.soapMessage = [args stringSoapMessage:paramsArray];
-    
-    ServiceArgs *args = [[ServiceArgs alloc] initWithMethodName:methodName soapParams:paramsArray];
+-(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{  
+    ServiceArgs *args = [[[ServiceArgs alloc] initWithMethodName:methodName soapParams:paramsArray] autorelease];
    return  [self asynService:args progress:nil success:finished failed:failed];
 }
 
@@ -253,16 +257,14 @@
     [helper asynService:args progress:progress success:finished failed:failed];
 }
 
-#pragma mark -
-#pragma mark ASIHTTPRequest delegate Methods
+#pragma mark - ASIHTTPRequest delegate Methods
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     ServiceResult *result=[ServiceResult requestResult:request];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(finishSoapRequest:)]) {
         [self.delegate finishSoapRequest:result];
     }
-    
-    
+
 	if(_finishBlock){
         _finishBlock(result);
     }
@@ -278,7 +280,6 @@
     if (_failedBlock) {
         _failedBlock(error,[request userInfo]);
     }
-    
 }
 
 

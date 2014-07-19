@@ -107,7 +107,6 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return xml;
 }
 
-
 -(NSString*)paramsFormatJsonString:(NSArray*)params{
     NSMutableString *json=[NSMutableString stringWithFormat:@"{"];
     for (NSDictionary *item in params) {
@@ -131,11 +130,11 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 /**
  *  生成参数部分
  *
- *  @param params <#params description#>
+ *  @param params 请求参数
  *
- *  @return <#return value description#>
+ *  @return 特殊格式的参数字符串
  */
--(NSString*)generateParamsPartString:(NSArray*)params{
+-(NSString *)generateParamsPartString:(NSArray*)params{
     NSMutableString *paramPart=[NSMutableString string];
     for (NSDictionary *item in params) {
         NSString *key=[[item allKeys] objectAtIndex:0];
@@ -159,14 +158,12 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 //#warning mark - td before
         /*
         NSMutableString *soap=[NSMutableString stringWithFormat:@"<tns1:%@><tns1:jsonString>",[self methodName]];
-        
         [soap appendString:[self paramsFormatJsonString:params]];
         [soap appendFormat:@"</tns1:jsonString></tns1:%@>",[self methodName]];
+         [soap appendString:[self paramsFormatJsonString:params]];
         */
         
         NSMutableString *soap=[NSMutableString stringWithFormat:@"<%@ xmlns=\"http://WebXml.com.cn/\">",[self methodName]];
-        
-        //[soap appendString:[self paramsFormatJsonString:params]];
         [soap appendString:[self generateParamsPartString:params]];
         [soap appendFormat:@"</%@>",[self methodName]];
         

@@ -22,22 +22,26 @@
 @synthesize ParentNode=_ParentNode;
 @synthesize PreviousSibling=_PreviousSibling;
 @synthesize Value=_Value;
+
 -(XmlNode*)FirstChild{
     if (_ChildNodes&&[_ChildNodes count]>0) {
         return [_ChildNodes objectAtIndex:0];
     }
     return nil;
 }
+
 -(XmlNode*)LastChild{
     if (_ChildNodes&&[_ChildNodes count]>0) {
         return [_ChildNodes lastObject];
     }
     return nil;
 }
+
 -(BOOL)HasChildNodes{
     if (_ChildNodes&&[_ChildNodes count]>0) {
         return YES;
     }
     return NO;
 }
+
 @end

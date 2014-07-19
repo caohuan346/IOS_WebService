@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface XmlNode : NSObject
+
 @property(nonatomic,retain) NSDictionary *Attributes;
 @property(nonatomic,retain) NSArray *ChildNodes;
 @property(nonatomic,readonly) XmlNode *FirstChild;
@@ -22,4 +23,5 @@
 @property(nonatomic,retain) XmlNode *ParentNode;
 @property(nonatomic,retain) XmlNode *PreviousSibling;
 @property(nonatomic,copy) NSString *Value;
+
 @end
