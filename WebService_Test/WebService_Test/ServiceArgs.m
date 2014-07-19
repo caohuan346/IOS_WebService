@@ -85,6 +85,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return defaultWebServiceNameSpace;
 }
 
+/*
 -(NSString*)soapMessage{
 //    if (soapMessage) {
 //        return soapMessage;
@@ -93,6 +94,8 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     self.soapMessage = message;
     return message;
 }
+ */
+
 -(NSMutableDictionary*)headers{
     NSMutableDictionary *dic=[NSMutableDictionary dictionary];
     [dic setValue:[[self webURL] host] forKey:@"Host"];
