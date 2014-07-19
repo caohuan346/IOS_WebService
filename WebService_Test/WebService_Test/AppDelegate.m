@@ -17,22 +17,18 @@
     NSMutableArray *params=[NSMutableArray array];
     [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"13825161921",@"mobileCode", nil]];
     [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"",@"userID", nil]];
-    ServiceArgs *args=[[ServiceArgs alloc] init];
+
+    [[ServiceHandler sharedInstance] asynRequest:@"getMobileCodeInfo" withParamsArray:params success:^(ServiceResult *result) {
+        NSLog(@"%@",result);
+    } failed:^(NSError *error, NSDictionary *userInfo) {
+        
+    }];
     
-    args.methodName=@"getMobileCodeInfo";//webservice方法名
-    args.soapParams=params;//方法参数
-    
-//    [[ServiceHandler sharedInstance] asynRequest:@"getMobileCodeInfo" withParamsArray:params success:^(ServiceResult *result) {
-//        NSLog(@"%@",result);
-//    } failed:^(NSError *error, NSDictionary *userInfo) {
-//        
-//    }];
-    
-    
+    /*
     [[ServiceHandler sharedInstance] asynService:args success:^(ServiceResult *result){
         NSLog(@"%@",result);
         
-       /*
+       
         NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"//xmlns:GetPlanListResult"];
         //NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"getMobileCodeInfoResult"];
         NSDictionary *dic = [arr[0][@"text"] objectFromJSONString];
@@ -42,11 +38,11 @@
         }else {
             
         }
-        */
+     
     } failed:^(NSError *error, NSDictionary *userInfo){
         NSLog(@"111111");
     }];
-    
+    */
     // Override point for customization after application launch.
     return YES;
 }

@@ -18,6 +18,7 @@
 @property(nonatomic,readonly) NSString *defaultSoapMesage;
 @property(nonatomic,retain) NSArray *soapParams;
 
+-(id)initWithMethodName:(NSString *)methodName soapParamsArray:(NSArray *)paramsArray;
 -(NSString*)stringSoapMessage:(NSArray*)params;
 +(ServiceArgs*)serviceMethodName:(NSString*)methodName;
 +(ServiceArgs*)serviceMethodName:(NSString*)methodName soapMessage:(NSString*)soapMsg;

@@ -16,6 +16,15 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 @synthesize webURL,headers,defaultSoapMesage;
 @synthesize soapParams;
 
+#pragma mark - init
+-(id)initWithMethodName:(NSString *)_methodName soapParamsArray:(NSArray *)_paramsArray{
+    if (self = [super init]) {
+        self.methodName = _methodName;
+        self.soapParams = _paramsArray;
+        self.soapMessage = [self stringSoapMessage:_paramsArray];
+    }
+    return self;
+}
 
 +(void)setWebServiceURL:(NSString*)url
 {

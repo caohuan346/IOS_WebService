@@ -167,12 +167,12 @@
 }
 
 -(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
-    ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
-    args.methodName = methodName;
-    args.soapParams = paramsArray;
-    args.soapMessage = [args stringSoapMessage:paramsArray];
+//    ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
+//    args.methodName = methodName;
+//    args.soapParams = paramsArray;
+//    args.soapMessage = [args stringSoapMessage:paramsArray];
     
-    //ServiceArgs *args = [[ServiceArgs alloc] initWithMethodName:methodName soapParams:paramsArray];
+    ServiceArgs *args = [[[ServiceArgs alloc] initWithMethodName:methodName soapParamsArray:paramsArray] autorelease];
     return  [self asynService:args success:finished failed:failed];
 }
 
