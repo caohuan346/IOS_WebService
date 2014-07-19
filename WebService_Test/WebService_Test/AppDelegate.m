@@ -17,36 +17,22 @@
     NSMutableArray *params=[NSMutableArray array];
     [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"13825161921",@"mobileCode", nil]];
     [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"",@"userID", nil]];
+    ServiceArgs *args=[[ServiceArgs alloc] init];
     
-    /**
-     <?xml version="1.0" encoding="utf-8"?>
-     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-         <soap:Body>
-             <getMobileCodeInfoResponse xmlns="http://WebXml.com.cn/">
-                 <getMobileCodeInfoResult>
-                 13825161921：广东 广州 广东移动全球通卡
-                 </getMobileCodeInfoResult>
-             </getMobileCodeInfoResponse>
-         </soap:Body>
-     </soap:Envelope>
-     */
+    args.methodName=@"getMobileCodeInfo";//webservice方法名
+    args.soapParams=params;//方法参数
     
-    [[ServiceHandler sharedInstance] asynRequest:@"getMobileCodeInfo" withParamsArray:params success:^(ServiceResult *result) {
-        NSLog(@"%@",result);
-    } failed:^(NSError *error, NSDictionary *userInfo) {
-        NSLog(@"%@",userInfo);
-    }];
+//    [[ServiceHandler sharedInstance] asynRequest:@"getMobileCodeInfo" withParamsArray:params success:^(ServiceResult *result) {
+//        NSLog(@"%@",result);
+//    } failed:^(NSError *error, NSDictionary *userInfo) {
+//        
+//    }];
     
-    /*
-     ServiceArgs *args=[[ServiceArgs alloc] init];
-     
-     args.methodName=@"getMobileCodeInfo";//webservice方法名
-     args.soapParams=params;//方法参数
-     
+    
     [[ServiceHandler sharedInstance] asynService:args success:^(ServiceResult *result){
         NSLog(@"%@",result);
         
-       
+       /*
         NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"//xmlns:GetPlanListResult"];
         //NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"getMobileCodeInfoResult"];
         NSDictionary *dic = [arr[0][@"text"] objectFromJSONString];
@@ -56,11 +42,11 @@
         }else {
             
         }
-     
+        */
     } failed:^(NSError *error, NSDictionary *userInfo){
         NSLog(@"111111");
     }];
-    */
+    
     // Override point for customization after application launch.
     return YES;
 }
