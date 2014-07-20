@@ -26,6 +26,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return self;
 }
 
+#pragma mark - setter
 +(void)setWebServiceURL:(NSString*)url
 {
     if (defaultWebServiceUrl!=url) {
@@ -41,8 +42,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     }
 }
 
-#pragma mark -
-#pragma mark 属性重写
+#pragma mark - getter
 -(NSString*)defaultSoapMesage{
     /*
     NSString *soapBody=@"<?xml version=\"1.0\"?><soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:Tuan=\"http://tempuri.org/\" xmlns:tns1=\"http://mobile.tuandai.com\" xmlns:ns1=\"http://mobile.tuandai.com/Imports\" xmlns:tns2=\"http://schemas.microsoft.com/2003/10/Serialization/\" xsl:version=\"1.0\">\n"
@@ -105,8 +105,7 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return dic;
 }
 
-#pragma mark -
-#pragma mark 私有方法
+#pragma mark - private
 -(NSString*)paramsFormatString:(NSArray*)params{
     NSMutableString *xml=[NSMutableString stringWithFormat:@""];
     for (NSDictionary *item in params) {
@@ -141,11 +140,11 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
 /**
  *  生成参数部分
  *
- *  @param params <#params description#>
+ *  @param params 参数数组
  *
- *  @return <#return value description#>
+ *  @return 参数字符串
  */
--(NSString*)generateParamsPartString:(NSArray*)params{
+-(NSString *)generateParamsPartString:(NSArray*)params{
     NSMutableString *paramPart=[NSMutableString string];
     for (NSDictionary *item in params) {
         NSString *key=[[item allKeys] objectAtIndex:0];
@@ -154,9 +153,8 @@ static NSString *defaultWebServiceNameSpace=@"http://WebXml.com.cn";
     return paramPart;
 }
 
-#pragma mark -
-#pragma mark 公有方法
--(NSString*)stringSoapMessage:(NSArray*)params{
+#pragma mark - public
+-(NSString *)stringSoapMessage:(NSArray*)params{
     if (params) {
 #warning mark - td before
         /*

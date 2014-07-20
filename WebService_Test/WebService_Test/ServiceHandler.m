@@ -13,7 +13,8 @@
 @synthesize delegate,httpRequest;
 @synthesize networkQueue;
 
-//单例模式
+#pragma mark - life circle
+// singleton
 + (ServiceHandler *)sharedInstance{
     static dispatch_once_t  onceToken;
     static ServiceHandler * sSharedInstance;
@@ -23,8 +24,7 @@
     });
     return sSharedInstance;
 }
-#pragma mark -
-#pragma mark 初始化操作
+
 -(id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate
 {
 	if (self=[super init]) {
@@ -35,8 +35,26 @@
 	}
 	return self;
 }
-#pragma mark -
-#pragma mark 获取公有请求的ASIHTTPRequest
+
+-(void)dealloc{
+    Block_release(_failedBlock);
+    Block_release(_finishBlock);
+    Block_release(_finishQueueBlock);
+    Block_release(_progressBlock);
+    [httpRequest clearDelegatesAndCancel];
+    [httpRequest release];
+    [networkQueue reset];
+    [networkQueue release];
+    if (_requestList) {
+        [_requestList release];
+    }
+    if (_queueResults) {
+        [_queueResults release];
+    }
+	[super dealloc];
+}
+
+#pragma mark - get public request
 -(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args{
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:args.webURL];
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
@@ -56,27 +74,29 @@
     [request setDefaultResponseEncoding:NSUTF8StringEncoding];
     return request;
 }
+
 +(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args{
     ServiceHandler *helper=[[[ServiceHandler alloc] init] autorelease];
     return [helper commonSharedRequest:args];
 }
-#pragma mark -
-#pragma mark 同步请求
+
+#pragma mark - sync request
 -(ServiceResult*)syncService:(ServiceArgs*)args{
     return [self syncService:args error:nil];
 }
+
 -(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error
 {
     ASIHTTPRequest *request=[self requestWithServerArgs:args];
-    //设置同步
+    //set sync
     [request startSynchronous];
     if (error) {
         *error=[request error];
     }
-    
-    //处理返回的结果
+    //handle result
     return [ServiceResult requestResult:request];
 }
+
 -(ServiceResult*)syncServiceMethodName:(NSString*)methodName{
     return [self syncServiceMethodName:methodName error:nil];
 }
@@ -84,24 +104,27 @@
     ServiceArgs *args=[ServiceArgs serviceMethodName:methodName];
     return  [self syncService:args error:error];
 }
+
 +(ServiceResult*)syncService:(ServiceArgs*)args
 {
     return [ServiceHandler syncService:args error:nil];
 }
+
 +(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error
 {
     ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncService:args error:error];
 }
+
 +(ServiceResult*)syncMethodName:(NSString*)methodName{
     return [self syncMethodName:methodName error:nil];
 }
+
 +(ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error{
     ServiceHandler *helper=[ServiceHandler sharedInstance];
     return [helper syncServiceMethodName:methodName error:error];
 }
-#pragma mark -
-#pragma mark asyn request
+#pragma mark - asyn request
 -(ASIHTTPRequest*)requestWithServerArgs:(ServiceArgs*)args{
     NSString *msgLength = [NSString stringWithFormat:@"%d", [args.soapMessage length]];
     ASIHTTPRequest *request=[ASIHTTPRequest requestWithURL:args.webURL];
@@ -124,6 +147,7 @@
     
     return request;
 }
+
 -(void)asynService:(ServiceArgs*)args{
     [self.httpRequest clearDelegatesAndCancel];
     [self setHttpRequest:[ASIHTTPRequest requestWithURL:args.webURL]];
@@ -196,9 +220,8 @@
     }];
     [request setFailedBlock:^{
         if (failed) {
-            //  取消时不显示
+            // 取消时不显示
             if ([[request.error description]  rangeOfString:@"cancelled"].location == NSNotFound  ) {
-                
                 failed(request.error,request.userInfo);
             }
         }
@@ -253,8 +276,7 @@
     [helper asynService:args progress:progress success:finished failed:failed];
 }
 
-#pragma mark -
-#pragma mark ASIHTTPRequest delegate Methods
+#pragma mark - ASIHTTPRequest delegate
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     ServiceResult *result=[ServiceResult requestResult:request];
@@ -282,8 +304,7 @@
 }
 
 
-#pragma mark -
-#pragma mark queue request
+#pragma mark - queue request
 //开始排列
 -(BOOL)cancelForMenthod:(NSString*)methodName{
     NSArray *array=[[ASIHTTPRequest  sharedQueue] operations];
@@ -401,7 +422,7 @@
     [self startQueue];
 }
 
-#pragma mark private
+#pragma mark - private
 -(NSString*)soapAction:(NSString*)namespace methodName:(NSString*)methodName{
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"/$" options:0 error:nil];
     NSUInteger numberOfMatches = [regex numberOfMatchesInString:namespace options:0 range:NSMakeRange(0, [namespace length])];
@@ -413,24 +434,6 @@
 #warning ---- soapAction generate
     //return [NSString stringWithFormat:@"%@/ZSDServices/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
     return [NSString stringWithFormat:@"%@/%@",[namespace stringByReplacingOccurrencesOfString:@"https:" withString:@"http:"],methodName];
-}
-
--(void)dealloc{
-    Block_release(_failedBlock);
-    Block_release(_finishBlock);
-    Block_release(_finishQueueBlock);
-    Block_release(_progressBlock);
-    [httpRequest clearDelegatesAndCancel];
-    [httpRequest release];
-    [networkQueue reset];
-    [networkQueue release];
-    if (_requestList) {
-        [_requestList release];
-    }
-    if (_queueResults) {
-        [_queueResults release];
-    }
-	[super dealloc];
 }
 
 @end

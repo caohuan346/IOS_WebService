@@ -10,6 +10,7 @@
 @synthesize nameSpace;
 @synthesize methodName;
 @synthesize xmlnsAttr;
+
 -(NSString*)nameSpace{
     if (!nameSpace) {
         if (self.request) {
@@ -24,6 +25,7 @@
     }
     return nameSpace;
 }
+
 -(NSString*)methodName{
     if (!methodName) {
         if (self.request) {
@@ -35,8 +37,8 @@
         }
     }
     return methodName;
-        
 }
+
 -(NSDictionary*)userInfo{
     if (!userInfo) {
         if (self.request) {
@@ -45,13 +47,14 @@
     }
     return userInfo;
 }
+
 -(NSString*)xmlString{
     if (!xmlString) {
         if (self.request) {
             NSString *temp=[self.request responseString];
             int statusCode = [self.request responseStatusCode];
             NSError *error=[self.request error];
-            //如果发生错误，就返回空
+            //发生错误，返回空
             if (error||statusCode!=200) {
                 temp=@"";
             }
@@ -60,9 +63,11 @@
     }
     return xmlString;
 }
+
 -(NSString*)xmlnsAttr{
     return [NSString stringWithFormat:@"xmlns=\"%@\"",[self nameSpace]];
 }
+
 +(id)requestResult:(ASIHTTPRequest*)httpRequest{
     ServiceResult *entity=[[ServiceResult alloc] init];
     entity.request=httpRequest;
@@ -71,4 +76,5 @@
     entity.xmlValue=[_helper soapMessageResultXml:entity.methodName];
     return [entity autorelease];
 }
+
 @end

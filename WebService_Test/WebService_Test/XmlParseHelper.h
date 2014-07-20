@@ -18,14 +18,22 @@
 -(void)setDataSource:(id)data;
 -(id)initWithData:(id)xml;
 
-//seek webservice content
+/**
+ *  获取webservice调用返回的xml内容
+ *
+ *  @param methodName 调用的webservice方法名
+ *
+ *  @return xml内容
+ */
 -(NSString*)soapMessageResultXml:(NSString*)methodName;
 
 //find
 -(XmlNode*)selectSingleNode:(NSString*)xpath;
 -(XmlNode*)selectSingleNode:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
+
 -(NSArray*)selectNodes:(NSString*)xpath;
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
+
 -(NSArray*)selectNodes:(NSString*)xpath className:(NSString*)className;
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces className:(NSString*)className;
 
@@ -53,7 +61,15 @@
 -(NSArray*)childNodesToObject:(NSString*)className;
 -(NSArray*)childNodesToArray;
 
-//辅助方法
+#pragma mark - vendor
+/**
+ *  获取当前节点下的所有子节点保存到对象中
+ *
+ *  @param node      node
+ *  @param className 对象类名
+ *
+ *  @return 对象
+ */
 -(id)childsNodeToObject:(GDataXMLNode*)node objectName:(NSString*)className;
 -(NSArray*)nodesChildsNodesToObjects:(GDataXMLNode*)node objectName:(NSString*)className;
 

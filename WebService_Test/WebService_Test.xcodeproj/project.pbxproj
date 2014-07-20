@@ -28,6 +28,7 @@
 		4754C3CC197913D00042B4D0 /* ServiceArgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3C7197913D00042B4D0 /* ServiceArgs.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4754C3CD197913D00042B4D0 /* ServiceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3C9197913D00042B4D0 /* ServiceHandler.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4754C3CE197913D00042B4D0 /* ServiceResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754C3CB197913D00042B4D0 /* ServiceResult.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		47F870B7197B4EAA00856BE2 /* XmlParseHelperTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F870B6197B4EAA00856BE2 /* XmlParseHelperTester.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		4754C3C9197913D00042B4D0 /* ServiceHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceHandler.m; sourceTree = "<group>"; };
 		4754C3CA197913D00042B4D0 /* ServiceResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceResult.h; sourceTree = "<group>"; };
 		4754C3CB197913D00042B4D0 /* ServiceResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceResult.m; sourceTree = "<group>"; };
+		47F870B6197B4EAA00856BE2 /* XmlParseHelperTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlParseHelperTester.m; sourceTree = "<group>"; };
 		93422F6BD72143CDBA7FA834 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		99C77FF69AD14EF2B60F2C38 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -167,6 +169,7 @@
 			children = (
 				47230D881979045C002BD4F0 /* WebService_TestTests.m */,
 				47230D831979045C002BD4F0 /* Supporting Files */,
+				47F870B6197B4EAA00856BE2 /* XmlParseHelperTester.m */,
 			);
 			path = WebService_TestTests;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47F870B7197B4EAA00856BE2 /* XmlParseHelperTester.m in Sources */,
 				47230D891979045C002BD4F0 /* WebService_TestTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -518,6 +522,7 @@
 				INFOPLIST_FILE = "WebService_TestTests/WebService_TestTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -536,6 +541,7 @@
 				INFOPLIST_FILE = "WebService_TestTests/WebService_TestTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

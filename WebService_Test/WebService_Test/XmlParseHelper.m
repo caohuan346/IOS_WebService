@@ -9,8 +9,12 @@
 #import "XmlParseHelper.h"
 #import "GDataXMLNode.h"
 #import "XmlNode.h"
-#define soapXmlNamespaces [NSDictionary dictionaryWithObjectsAndKeys:@"http://schemas.xmlsoap.org/soap/envelope/",@"s",@"http://mobile.tuandai.com",@"xmlns",nil]
+//#define soapXmlNamespaces [NSDictionary dictionaryWithObjectsAndKeys:@"http://schemas.xmlsoap.org/soap/envelope/",@"s",@"http://mobile.tuandai.com",@"xmlns",nil]
+
+#define soapXmlNamespaces [NSDictionary dictionaryWithObjectsAndKeys:@"http://schemas.xmlsoap.org/soap/envelope/",@"s",@"http://WebXml.com.cn/",@"xmlns",nil]
+
 @interface XmlNode()
+
 -(XmlNode*)xmlStringToXmlNode;
 -(NSDictionary*)getNodeAttributes:(GDataXMLNode*)node;
 -(NSString*)getInnerXml:(GDataXMLNode*)node;
@@ -20,24 +24,30 @@
 -(GDataXMLDocument*)xmlDocumentObject:(id)data;
 -(GDataXMLNode*)getSingleNode:(NSString*)xpath;
 -(GDataXMLNode*)getSingleNode:(NSString*)xpath nameSpaces:(NSDictionary*)spaces;
+
 @end
 
 @implementation XmlParseHelper
+
 @synthesize document=_document;
 @synthesize xmlNode=_xmlNode;
+
 -(void)dealloc{
     [super dealloc];
     [_document release];
 }
+
 -(id)initWithData:(id)xml{
     if (self=[super init]) {
         self.document=[self xmlDocumentObject:xml];
     }
     return self;
 }
+
 -(void)setDataSource:(id)data{
     self.document=[self xmlDocumentObject:data];
 }
+
 -(NSString*)soapMessageResultXml:(NSString*)methodName{
     if (methodName) {
         NSString *searchStr=[NSString stringWithFormat:@"//%@Result",methodName];
@@ -66,18 +76,21 @@
     return @"";
      ***/
 }
+
 -(XmlNode*)xmlNode{
     if (!_xmlNode) {
         _xmlNode=[self xmlStringToXmlNode];
     }
     return _xmlNode;
 }
+
 -(XmlNode*)selectSingleNode:(NSString*)xpath{
     if (self.document) {
         return [self selectSingleNode:xpath nameSpaces:nil];
     }
     return nil;
 }
+
 -(XmlNode*)selectSingleNode:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     GDataXMLNode *node=[self getSingleNode:xpath nameSpaces:spaces];
     if (node) {
@@ -93,20 +106,22 @@
     }
     return nil;
 }
+
 -(NSArray*)selectNodes:(NSString*)xpath{
     return [self selectNodes:xpath nameSpaces:nil];
 }
+
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     if (self.document) {
         
         NSMutableArray *array=[NSMutableArray array];
         GDataXMLElement* rootNode = [self.document rootElement];
         NSArray *childs;
-         if (spaces) {
-             childs=[rootNode nodesForXPath:xpath namespaces:spaces error:nil];
-         }else{
+        if (spaces) {
+            childs=[rootNode nodesForXPath:xpath namespaces:spaces error:nil];
+        }else{
             childs=[rootNode nodesForXPath:xpath error:nil];
-         }
+        }
         
         for (GDataXMLNode *item in childs){
             [array addObject:[self childsNodeToDictionary:item]];
@@ -115,9 +130,11 @@
     }
     return nil;
 }
+
 -(NSArray*)selectNodes:(NSString*)xpath className:(NSString*)className{
     return [self selectNodes:xpath nameSpaces:nil className:className];
 }
+
 -(NSArray*)selectNodes:(NSString*)xpath nameSpaces:(NSDictionary*)spaces className:(NSString*)className{
     if (self.document) {
         NSMutableArray *array=[NSMutableArray array];
@@ -136,12 +153,14 @@
     }
     return nil;
 }
+
 -(id)nodeToObject:(GDataXMLNode*)node className:(NSString*)className{
     if (node&&className&&[className length]>0) {
         return [self childsNodeToObject:node objectName:className];
     }
     return nil;
 }
+
 -(NSArray*)nodesChildsNodesToObjects:(GDataXMLNode*)node objectName:(NSString*)className{
     NSMutableArray *result=[NSMutableArray array];
     NSArray *childs=[node children];
@@ -150,22 +169,27 @@
     }
     return result;
 }
+
 -(XmlNode*)soapXmlSelectSingleNode:(NSString*)xpath{
     return [self selectSingleNode:xpath nameSpaces:soapXmlNamespaces];
 }
+
 -(NSArray*)soapXmlSelectNodes:(NSString*)xpath{
     return [self selectNodes:xpath nameSpaces:soapXmlNamespaces];
 }
+
 -(NSArray*)soapXmlSelectNodes:(NSString*)xpath className:(NSString*)className{
-    
     return [self selectNodes:xpath nameSpaces:soapXmlNamespaces className:className];
 }
+
 -(NSDictionary*)getXmlNodeAttrs:(GDataXMLNode*)node{
     return [self getNodeAttributes:node];
 }
+
 -(NSDictionary*)selectSingleNodeAttrs:(NSString*)xpath{
     return [self selectSingleNodeAttrs:xpath nameSpaces:nil];
 }
+
 -(NSDictionary*)selectSingleNodeAttrs:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     GDataXMLNode *node=[self getSingleNode:xpath nameSpaces:spaces];
     if (node) {
@@ -173,9 +197,11 @@
     }
     return nil;
 }
+
 -(NSArray*)selectNodeAttrs:(NSString*)xpath{
     return [self selectNodeAttrs:xpath nameSpaces:nil];
 }
+
 -(NSArray*)selectNodeAttrs:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     if (self.document) {
         NSMutableArray *array=[NSMutableArray array];
@@ -190,19 +216,21 @@
             [array addObject:[self getNodeAttributes:item]];
         }
         return array;
-
     }
     return nil;
 }
+
 -(NSString*)getXmlNodeValue:(GDataXMLNode*)node{
     if (node) {
         return node.stringValue;
     }
     return nil;
 }
+
 -(NSString*)selectSingleNodeValue:(NSString*)xpath{
     return [self selectSingleNodeValue:xpath nameSpaces:nil];
 }
+
 -(NSString*)selectSingleNodeValue:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     GDataXMLNode *node=[self getSingleNode:xpath nameSpaces:spaces];
     if (node) {
@@ -210,9 +238,11 @@
     }
     return nil;
 }
+
 -(NSArray*)selectNodeValues:(NSString*)xpath{
     return [self selectNodeValues:xpath nameSpaces:nil];
 }
+
 -(NSArray*)selectNodeValues:(NSString*)xpath nameSpaces:(NSDictionary*)spaces{
     if (self.document) {
         NSMutableArray *array=[NSMutableArray array];
@@ -230,6 +260,7 @@
     }
     return nil;
 }
+
 -(NSArray*)childNodesToObject:(NSString*)className{
     if (self.document) {
         GDataXMLElement *root=[self.document rootElement];
@@ -242,6 +273,7 @@
     }
     return nil;
 }
+
 -(NSArray*)childNodesToArray{
     if (self.document) {
         GDataXMLElement *root=[self.document rootElement];
@@ -254,8 +286,8 @@
     }
     return nil;
 }
-#pragma mark -
-#pragma mark 私有方法
+
+#pragma mark - private
 -(XmlNode*)xmlStringToXmlNode{
     if (self.document) {
         GDataXMLElement* rootNode = [self.document rootElement];
@@ -300,6 +332,7 @@
     }
     return nil;
 }
+
 -(NSArray*)getChildNodes:(GDataXMLNode*)parentNode parent:(XmlNode*)parent{
     NSMutableArray *arr=[NSMutableArray array];
     NSArray *childs=[parentNode children];
@@ -329,8 +362,9 @@
         }
 
     }
-        return arr;
+    return arr;
 }
+
 /***
 -(XmlNode*)searchNode:(XmlNode*)node nodeName:(NSString*)nodeName{
     if ([node.Name isEqualToString:nodeName]) {
@@ -345,6 +379,7 @@
     return nil;
 }
  ***/
+
 -(NSDictionary*)getNodeAttributes:(GDataXMLNode*)node{
     if (node) {
         GDataXMLElement *element=(GDataXMLElement*)node;
@@ -362,6 +397,7 @@
     }
     return nil;
 }
+
 -(NSString*)getInnerXml:(GDataXMLNode*)node{
     if (node) {
         NSMutableString *xml=[NSMutableString stringWithFormat:@""];
@@ -373,6 +409,7 @@
     }
     return @"";
 }
+
 -(NSMutableDictionary*)childsNodeToDictionary:(GDataXMLNode*)node{
     NSMutableDictionary *dic=[NSMutableDictionary dictionary];
     NSArray *childs=[node children];
@@ -381,6 +418,7 @@
     }
     return dic;
 }
+
 -(id)childsNodeToObject:(GDataXMLNode*)node objectName:(NSString*)className{
     id obj=[[NSClassFromString(className) alloc] init];
     NSArray *childs=[node children];
@@ -392,6 +430,7 @@
     }
     return [obj autorelease];
 }
+
 -(GDataXMLDocument*)xmlDocumentObject:(id)data{
     NSError *error=nil;
     GDataXMLDocument *document=nil;
@@ -430,4 +469,5 @@
     }
     return nil;
 }
+
 @end

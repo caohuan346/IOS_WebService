@@ -15,22 +15,38 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSMutableArray *params=[NSMutableArray array];
-    [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"13825161921",@"mobileCode", nil]];
+    [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"13467803712",@"mobileCode", nil]];
     [params addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"",@"userID", nil]];
 
+    /**
+     *  <?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+     <soap:Body>
+     <getMobileCodeInfoResponse xmlns="http://WebXml.com.cn/">
+     <getMobileCodeInfoResult>
+     13467803712：湖南 郴州 湖南移动大众卡
+     </getMobileCodeInfoResult>
+     </getMobileCodeInfoResponse>
+     </soap:Body>
+     </soap:Envelope>
+     */
+    
     [[ServiceHandler sharedInstance] asynRequest:@"getMobileCodeInfo" withParamsArray:params success:^(ServiceResult *result) {
-        NSLog(@"%@",result);
+        NSLog(@"%@",result.xmlParse);
+
+        NSArray *array=[result.xmlParse soapXmlSelectNodes:@"//xmlns:getMobileCodeInfoResult"];
+        NSString *numberInfo = array[0][@"text"];
+        NSLog(@"%@",numberInfo);
+        
     } failed:^(NSError *error, NSDictionary *userInfo) {
         
     }];
-    
+
     /*
     [[ServiceHandler sharedInstance] asynService:args success:^(ServiceResult *result){
         NSLog(@"%@",result);
         
        
         NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"//xmlns:GetPlanListResult"];
-        //NSArray *arr=[result.xmlParse soapXmlSelectNodes:@"getMobileCodeInfoResult"];
         NSDictionary *dic = [arr[0][@"text"] objectFromJSONString];
         
         if ([dic[@"Result"]  intValue] == 1) {
