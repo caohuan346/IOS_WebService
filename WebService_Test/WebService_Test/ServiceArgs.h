@@ -1,4 +1,10 @@
- 
+//
+//  ServiceArgs.h
+//  ZOSENDA
+//
+//  Created by hc on 14-7-17.
+//  Copyright (c) 2014年 ZOSENDA GROUP. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
 

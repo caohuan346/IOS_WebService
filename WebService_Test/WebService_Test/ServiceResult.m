@@ -1,7 +1,15 @@
- 
+//
+//  ServiceResult.m
+//  ZOSENDA
+//
+//  Created by hc on 14-7-17.
+//  Copyright (c) 2014年 ZOSENDA GROUP. All rights reserved.
+//
 
 #import "ServiceResult.h"
+
 @implementation ServiceResult
+
 @synthesize request;
 @synthesize userInfo;
 @synthesize xmlParse;

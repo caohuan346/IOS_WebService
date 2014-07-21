@@ -1,4 +1,11 @@
- 
+//
+//  ServiceHandler.m
+//  ZOSENDA
+//
+//  Created by hc on 14-7-17.
+//  Copyright (c) 2014年 ZOSENDA GROUP. All rights reserved.
+//
+
 #import <Foundation/Foundation.h>
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
@@ -27,6 +34,7 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
 @end
 
 @interface ServiceHandler : NSObject{
+    
 @private
     finishBlockRequest _finishBlock;
     failedBlockRequest _failedBlock;
@@ -37,6 +45,7 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
     NSMutableArray *_requestList;
      
 }
+
 @property(nonatomic,assign) id<ServiceHandlerDelegate> delegate;
 @property(nonatomic,retain) ASIHTTPRequest *httpRequest;
 @property(nonatomic,retain) ASINetworkQueue *networkQueue;
@@ -46,11 +55,11 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
 //init
 -(id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate;
 
-/******设置公有的请求****/
+//public request
 -(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
 +(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
 
-/*****同步请求***/
+//sync request
 -(ServiceResult*)syncService:(ServiceArgs*)args;
 -(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error;
 -(ServiceResult*)syncServiceMethodName:(NSString*)methodName;
@@ -60,7 +69,7 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
 +(ServiceResult*)syncMethodName:(NSString*)methodName;
 +(ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error;
 
-/*****异步请求***/
+//asyn request
 -(void)asynService:(ServiceArgs*)args;
 -(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate;
 

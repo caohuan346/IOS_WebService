@@ -9,6 +9,7 @@
 #import "XmlNode.h"
 
 @implementation XmlNode
+
 @synthesize Attributes=_Attributes;
 @synthesize ChildNodes=_ChildNodes;
 @synthesize FirstChild=_FirstChild;

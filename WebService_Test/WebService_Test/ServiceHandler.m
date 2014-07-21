@@ -1,4 +1,10 @@
-
+//
+//  ServiceHandler.m
+//  ZOSENDA
+//
+//  Created by hc on 14-7-17.
+//  Copyright (c) 2014年 ZOSENDA GROUP. All rights reserved.
+//
 
 #import "ServiceHandler.h"
 
@@ -191,6 +197,7 @@
 }
 
 -(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed{
+    
 //    ServiceArgs *args=[[[ServiceArgs alloc] init] autorelease];
 //    args.methodName = methodName;
 //    args.soapParams = paramsArray;

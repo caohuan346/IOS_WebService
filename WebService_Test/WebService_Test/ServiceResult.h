@@ -1,8 +1,16 @@
- 
+//
+//  ServiceResult.m
+//  ZOSENDA
+//
+//  Created by hc on 14-7-17.
+//  Copyright (c) 2014年 ZOSENDA GROUP. All rights reserved.
+//
 
 #import <Foundation/Foundation.h>
+
 #import "ASIHTTPRequest.h"
 #import "XmlParseHelper.h"
+
 @interface ServiceResult : NSObject
 
 @property(nonatomic,retain) ASIHTTPRequest *request;
@@ -19,4 +27,5 @@
 @property(nonatomic,copy) NSString *xmlValue;
 
 +(id)requestResult:(ASIHTTPRequest*)httpRequest;
+
 @end
