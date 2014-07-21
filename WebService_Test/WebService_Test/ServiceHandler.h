@@ -26,10 +26,10 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
 @protocol ServiceHandlerDelegate<NSObject>
 
 @optional
--(void)progressRequest:(ASIHTTPRequest*)request;
--(void)finishSoapRequest:(ServiceResult*)result;
--(void)failedSoapRequest:(NSError*)error userInfo:(NSDictionary*)dic;
--(void)finishQueueComplete:(NSArray*)results;
+- (void)progressRequest:(ASIHTTPRequest*)request;
+- (void)finishSoapRequest:(ServiceResult*)result;
+- (void)failedSoapRequest:(NSError*)error userInfo:(NSDictionary*)dic;
+- (void)finishQueueComplete:(NSArray*)results;
 
 @end
 
@@ -53,25 +53,25 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
 //singleton
 + (ServiceHandler *)sharedInstance;
 //init
--(id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate;
+- (id)initWithDelegate:(id<ServiceHandlerDelegate>)theDelegate;
 
 //public request
--(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
-+(ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
+- (ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
++ (ASIHTTPRequest*)commonSharedRequest:(ServiceArgs*)args;
 
 //sync request
--(ServiceResult*)syncService:(ServiceArgs*)args;
--(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error;
--(ServiceResult*)syncServiceMethodName:(NSString*)methodName;
--(ServiceResult*)syncServiceMethodName:(NSString*)methodName error:(NSError**)error;
-+(ServiceResult*)syncService:(ServiceArgs*)args;
-+(ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error;
-+(ServiceResult*)syncMethodName:(NSString*)methodName;
-+(ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error;
+- (ServiceResult*)syncService:(ServiceArgs*)args;
+- (ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error;
+- (ServiceResult*)syncServiceMethodName:(NSString*)methodName;
+- (ServiceResult*)syncServiceMethodName:(NSString*)methodName error:(NSError**)error;
++ (ServiceResult*)syncService:(ServiceArgs*)args;
++ (ServiceResult*)syncService:(ServiceArgs*)args error:(NSError**)error;
++ (ServiceResult*)syncMethodName:(NSString*)methodName;
++ (ServiceResult*)syncMethodName:(NSString*)methodName error:(NSError**)error;
 
 //asyn request
--(void)asynService:(ServiceArgs*)args;
--(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate;
+- (void)asynService:(ServiceArgs*)args;
+- (void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate;
 
 /**
  *  异步请求某方法
@@ -83,33 +83,33 @@ typedef void (^finishBlockQueueComplete)(NSArray *results);
  *
  *  @return asiHttpRequest
  */
--(ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
+- (ASIHTTPRequest*)asynRequest:(NSString *)methodName withParamsArray:(NSArray *)paramsArray success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
--(ASIHTTPRequest*)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
+- (ASIHTTPRequest*)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
--(ASIHTTPRequest*)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
+- (ASIHTTPRequest*)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
--(void)asynServiceMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate;
+- (void)asynServiceMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate;
 
--(ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
+- (ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
--(ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
+- (ASIHTTPRequest*)asynServiceMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
-+(void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate;
++ (void)asynService:(ServiceArgs*)args delegate:(id<ServiceHandlerDelegate>)theDelegate;
 
-+(void)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
-+(void)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
-+(void)asynMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate;
-+(void)asynMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
-+(void)asynMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
++ (void)asynService:(ServiceArgs*)args success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
++ (void)asynService:(ServiceArgs*)args progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
++ (void)asynMethodName:(NSString*)methodName delegate:(id<ServiceHandlerDelegate>)theDelegate;
++ (void)asynMethodName:(NSString*)methodName success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
++ (void)asynMethodName:(NSString*)methodName progress:(void(^)(ASIHTTPRequest*))progress success:(void(^)(ServiceResult* result))finished failed:(void(^)(NSError *error,NSDictionary *userInfo))failed;
 
 /*****队列请求***/
--(void)addQueue:(ASIHTTPRequest*)request;
--(void)addRangeQueue:(NSArray*)requests;
--(void)startQueue;
--(void)startQueue:(id<ServiceHandlerDelegate>)theDelegate;
--(void)startQueue:(finishBlockRequest)finish failed:(failedBlockRequest)failed complete:(finishBlockQueueComplete)finishQueue;
+- (void)addQueue:(ASIHTTPRequest*)request;
+- (void)addRangeQueue:(NSArray*)requests;
+- (void)startQueue;
+- (void)startQueue:(id<ServiceHandlerDelegate>)theDelegate;
+- (void)startQueue:(finishBlockRequest)finish failed:(failedBlockRequest)failed complete:(finishBlockQueueComplete)finishQueue;
 
 //cancel
--(BOOL)cancelForMenthod:(NSString*)methodName;
+- (BOOL)cancelForMenthod:(NSString*)methodName;
 @end

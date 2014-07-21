@@ -9,7 +9,6 @@
 #import "XmlParseHelper.h"
 #import "GDataXMLNode.h"
 #import "XmlNode.h"
-//#define soapXmlNamespaces [NSDictionary dictionaryWithObjectsAndKeys:@"http://schemas.xmlsoap.org/soap/envelope/",@"s",@"http://mobile.tuandai.com",@"xmlns",nil]
 
 #define soapXmlNamespaces [NSDictionary dictionaryWithObjectsAndKeys:@"http://schemas.xmlsoap.org/soap/envelope/",@"s",@"http://WebXml.com.cn/",@"xmlns",nil]
 
